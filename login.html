@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!-- Created By CodingNepal -->
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Форма входа | CodeLab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrapper">
+    <div class="title">
+        Форма входа
+    </div>
+    <form id="loginForm"> <!-- Добавлен id для формы -->
+        <div class="field">
+            <input type="text" id="login" required> <!-- Добавлен id для поля логина -->
+            <label>Логин</label>
+        </div>
+        <div class="field">
+            <input type="password" id="password" required> <!-- Добавлен id для поля пароля -->
+            <label>Пароль</label>
+        </div>
+        <div class="field">
+            <input type="submit" value="Войти">
+        </div>
+        <div class="signup-link">
+            Не зарегистрированы? <a id="registerLink" href="#">Зарегистрироваться сейчас</a> <!-- Добавлен id для ссылки "Зарегистрироваться" -->
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Предотвращение отправки формы по умолчанию
+
+        // Получение данных из формы
+        var login = document.getElementById('login').value;
+        var password = document.getElementById('password').value;
+
+        console.log(1)
+
+        fetch('http://127.0.0.1:5000/api/authorize', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                login: login,
+                password: password
+            })
+        })
+            .then(function(response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Ошибка входа');
+                }
+            })
+            .then(function(data) {
+                // Обработка данных, полученных от сервера
+                console.log(data);
+
+                // Перенаправление на главную страницу, если вход прошел успешно
+                if (data.status === 'ok') {
+                    window.location.href = 'main.html'; // Перенаправление на main.html
+                }
+            })
+            .catch(function(error) {
+                console.error(error);
+            });
+    });
+
+    // Добавлен обработчик события click для ссылки "Зарегистрироваться"
+    document.getElementById('registerLink').addEventListener('click', function(event) {
+        event.preventDefault(); // Предотвращение перехода по ссылке по умолчанию
+
+        // Перенаправление на страницу регистрации
+        window.location.href = 'registration.html';
+    });
+
+</script>
+</body>
+</html>

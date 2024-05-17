@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!-- Created By CodingNepal -->
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Форма регистрации</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrapper">
+    <div class="title">
+        Форма регистрации
+    </div>
+    <form id="registerForm"> <!-- Добавлен id для формы -->
+        <div class="field">
+            <input type="text" id="username" required> <!-- Добавлен id для поля имени пользователя -->
+            <label>Имя пользователя</label>
+        </div>
+        <div class="field">
+            <input type="password" id="password" required> <!-- Добавлен id для поля пароля -->
+            <label>Пароль</label>
+        </div>
+        <div class="field">
+            <input type="submit" value="Зарегистрироваться">
+        </div>
+        <div class="signup-link">
+            Уже зарегистрированы? <a id="loginLink" href="#">Войти сейчас</a> <!-- Добавлен id для ссылки "Войти сейчас" -->
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Предотвращение отправки формы по умолчанию
+
+        // Получение данных из формы
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+
+        fetch('http://127.0.0.1:5000/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+                role: 'user' // Роль по умолчанию, если не требуется выбор роли
+            })
+        })
+            .then(function(response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Ошибка регистрации');
+                }
+            })
+            .then(function(data) {
+                // Обработка данных, полученных от сервера
+                console.log(data);
+
+                // Перенаправление на главную страницу, если регистрация прошла успешно
+                if (data.status === 'ok') {
+                    window.location.href = 'main.html'; // Перенаправление на main.html
+                }
+            })
+            .catch(function(error) {
+                console.error(error);
+            });
+    });
+
+    // Добавлен обработчик события click для ссылки "Войти сейчас"
+    document.getElementById('loginLink').addEventListener('click', function(event) {
+        event.preventDefault(); // Предотвращение перехода по ссылке по умолчанию
+
+        // Перенаправление на страницу входа
+        window.location.href = 'login.html';
+    });
+
+</script>
+</body>
+</html>
