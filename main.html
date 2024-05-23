@@ -22,6 +22,7 @@
             <th>Описание</th>
             <th>Цена</th>
             <th>Количество</th>
+            <th></th>
         </tr>
         <!-- Add your product data here -->
     </table>
@@ -98,7 +99,6 @@
         createProductPopup.style.display = "none";
     }
 
-    // Function to add new product to the table
     function addProductToTable(id, name, description, price, quantity) {
         const newRow = productTable.insertRow();
 
@@ -121,22 +121,30 @@
         // Quantity cell
         const quantityCell = newRow.insertCell();
         quantityCell.textContent = quantity;
-    }
 
-    // Function to fetch and load products
-    async function fetchAndLoadProducts() {
-        try {
-            const response = await fetch('http://127.0.0.1:5000/api/products');
-            if (!response.ok) {
-                throw new Error('Failed to fetch products');
-            }
-            const products = await response.json();
-            for (const product of products) {
-                addProductToTable(product.id, product.name, product.description, product.price, product.quantity);
-            }
-        } catch (error) {
-            console.error(error);
-        }
+        // Delete button cell
+        const deleteCell = newRow.insertCell();
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-btn";
+        deleteBtn.textContent = "🗑️";
+        deleteBtn.addEventListener("click", function() {
+            // Send delete request to the server
+            fetch(`http://127.0.0.1:5000/api/products/${id}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Remove the row from the table
+                        newRow.remove();
+                    } else {
+                        console.error("Failed to delete product");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        });
+        deleteCell.appendChild(deleteBtn);
     }
 
     // Event listener for create product button
