@@ -1,14 +1,17 @@
 {
-  "name": "my-electron-app",
+  "name": "furniture",
   "version": "1.0.0",
-  "description": "Hello World!",
+  "description": "Best furniture app",
   "main": "main.js",
-  "author": "Jane Doe",
+  "author": "Mikhail Plotnikov",
   "license": "MIT",
-  "devDependencies": {
-    "electron": "^30.0.6"
-  },
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^30.0.7",
+    "electron-builder": "^24.13.3"
   }
 }
