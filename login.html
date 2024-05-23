@@ -12,6 +12,7 @@
         Форма входа
     </div>
     <form id="loginForm"> <!-- Добавлен id для формы -->
+        <div id="error-message" class="error-message"></div>
         <div class="field">
             <input type="text" id="login" required> <!-- Добавлен id для поля логина -->
             <label>Логин</label>
@@ -33,11 +34,12 @@
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Предотвращение отправки формы по умолчанию
 
-        // Получение данных из формы
-        var login = document.getElementById('login').value;
-        var password = document.getElementById('password').value;
+        // Скрытие сообщения об ошибке
+        document.getElementById('error-message').innerHTML = '';
 
-        console.log(1)
+        // Получение данных из формы
+        let login = document.getElementById('login').value;
+        let password = document.getElementById('password').value;
 
         fetch('http://127.0.0.1:5000/api/authorize', {
             method: 'POST',
@@ -67,8 +69,12 @@
             })
             .catch(function(error) {
                 console.error(error);
+
+                // Отображение сообщения об ошибке
+                document.getElementById('error-message').innerHTML = 'Ошибка входа. Проверьте логин и пароль.';
             });
     });
+
 
     // Добавлен обработчик события click для ссылки "Зарегистрироваться"
     document.getElementById('registerLink').addEventListener('click', function(event) {

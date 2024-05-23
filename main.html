@@ -13,6 +13,7 @@
     </div>
     <div>
         <button class="koshkozhena" id="create-product-btn">Создать</button>
+        <button class="koshkozhena" id="logout-btn">Выйти</button>
     </div>
     <table>
         <tr>
@@ -66,6 +67,26 @@
     const createProductPopup = document.getElementById("create-product-popup");
     const createProductForm = document.getElementById("create-product-form");
     const productTable = document.querySelector("table");
+    const logoutBtn = document.getElementById("logout-btn");
+
+    // Event listener for logout button
+    logoutBtn.addEventListener("click", function() {
+        // Send logout request to the server
+        fetch('http://127.0.0.1:5000/api/logout', {
+            method: 'POST'
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Redirect to login page
+                    window.location.href = "login.html";
+                } else {
+                    console.error("Failed to log out");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    });
 
     // Function to open create product popup
     function openCreateProductPopup() {
@@ -95,7 +116,7 @@
 
         // Price cell
         const priceCell = newRow.insertCell();
-        priceCell.textContent = price;
+        priceCell.textContent = price + " ₽";
 
         // Quantity cell
         const quantityCell = newRow.insertCell();
